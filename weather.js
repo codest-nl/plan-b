@@ -5,12 +5,13 @@ class WeatherApp {
         this.location = location || {};
         this.container = document.getElementById('weather-wrap');
 
+        this.init();
+        
         if (this.debug) {
             console.log("Weather Data:", this.weather);
             console.log("Location Data:", this.location);
+            this.debugWeatherTypes(); // Start debug weather types if enabled
         }
-
-        this.init();
     }
 
     init() {
@@ -332,10 +333,10 @@ class WeatherApp {
         } else if (weatherType === "Wind" || weatherType === "Storm" || weatherType.includes("wind") || weatherType.includes("storm")) {
             // Gebruik Wind / storm kleuren
             colorSet = [
-                new THREE.Vector3(0.627, 0.914, 1.0),    // rgba(160, 233, 255, 1)
-                new THREE.Vector3(0.282, 0.016, 0.973),  // rgba(72, 4, 248, 1)
-                new THREE.Vector3(0.627, 0.914, 1.0),
                 new THREE.Vector3(0.282, 0.016, 0.973),
+                new THREE.Vector3(0.627, 0.914, 1.0),
+                new THREE.Vector3(0.282, 0.016, 0.973),  // rgba(72, 4, 248, 1)
+                new THREE.Vector3(0.627, 0.914, 1.0),    // rgba(160, 233, 255, 1)
             ];
         } else {
             // Fallback kleuren (neutraal grijs)
@@ -358,120 +359,6 @@ class WeatherApp {
         ];
         this.currentColorTransition.targetColors = colorSet;
     }
-    // updateShaderColors(temperature, weatherType) {
-    //     let colorSet;
-    //
-    //     // Extremely distinct color palettes for different conditions
-    //     if (weatherType === "Clear" || weatherType === "Sunny") {
-    //         if (temperature > 25) {
-    //             // Hot sunny day - Intense oranges and yellows
-    //             colorSet = [
-    //                 new THREE.Vector3(1.00, 0.90, 0.30), // Bright yellow
-    //                 new THREE.Vector3(1.00, 0.65, 0.20), // Orange
-    //                 new THREE.Vector3(1.00, 0.40, 0.10), // Deep orange
-    //                 new THREE.Vector3(1.00, 0.80, 0.50)  // Light orange
-    //             ];
-    //         } else {
-    //             // Pleasant sunny day - Sky blues with yellow accent
-    //             colorSet = [
-    //                 new THREE.Vector3(0.40, 0.70, 1.00), // Sky blue
-    //                 new THREE.Vector3(0.60, 0.80, 1.00), // Light blue
-    //                 new THREE.Vector3(0.80, 0.90, 1.00), // Very light blue
-    //                 new THREE.Vector3(1.00, 0.95, 0.70)  // Light yellow accent
-    //             ];
-    //         }
-    //     } else if (weatherType === "Rain" || weatherType === "Drizzle" || weatherType.includes("rain")) {
-    //         // Rainy - Deep blues and grays
-    //         colorSet = [
-    //             new THREE.Vector3(0.20, 0.20, 0.35), // Dark blue-gray
-    //             new THREE.Vector3(0.30, 0.35, 0.50), // Medium blue-gray
-    //             new THREE.Vector3(0.45, 0.50, 0.65), // Lighter blue-gray
-    //             new THREE.Vector3(0.60, 0.65, 0.80)  // Light blue-gray
-    //         ];
-    //     } else if (weatherType === "Snow" || weatherType.includes("snow")) {
-    //         // Snowy - White blues
-    //         colorSet = [
-    //             new THREE.Vector3(0.90, 0.95, 1.00), // White with blue tint
-    //             new THREE.Vector3(0.85, 0.90, 1.00), // Very light blue
-    //             new THREE.Vector3(0.75, 0.85, 1.00), // Light blue
-    //             new THREE.Vector3(0.70, 0.80, 0.95)  // Slightly deeper blue
-    //         ];
-    //     } else if (weatherType === "Clouds" || weatherType === "Fog" || weatherType.includes("cloud") || weatherType.includes("overcast")) {
-    //         if (temperature < 10) {
-    //             // Cold cloudy - Gray with blue tint
-    //             colorSet = [
-    //                 new THREE.Vector3(0.70, 0.70, 0.75), // Light gray
-    //                 new THREE.Vector3(0.60, 0.60, 0.70), // Medium gray with blue
-    //                 new THREE.Vector3(0.50, 0.50, 0.60), // Darker gray with blue
-    //                 new THREE.Vector3(0.40, 0.40, 0.50)  // Dark gray-blue
-    //             ];
-    //         } else {
-    //             // Warm cloudy - Gray with yellow tint
-    //             colorSet = [
-    //                 new THREE.Vector3(0.80, 0.80, 0.75), // Light warm gray
-    //                 new THREE.Vector3(0.70, 0.70, 0.65), // Medium warm gray
-    //                 new THREE.Vector3(0.60, 0.60, 0.55), // Darker warm gray
-    //                 new THREE.Vector3(0.50, 0.50, 0.45)  // Dark warm gray
-    //             ];
-    //         }
-    //     } else if (weatherType === "Thunderstorm" || weatherType.includes("storm")) {
-    //         // Thunderstorm - Dramatic purples and dark blues
-    //         colorSet = [
-    //             new THREE.Vector3(0.20, 0.10, 0.30), // Dark purple
-    //             new THREE.Vector3(0.30, 0.15, 0.40), // Deep purple
-    //             new THREE.Vector3(0.40, 0.20, 0.50), // Medium purple
-    //             new THREE.Vector3(0.15, 0.15, 0.25)  // Very dark blue-purple
-    //         ];
-    //     } else {
-    //         // Default - Neutral colors
-    //         colorSet = [
-    //             new THREE.Vector3(0.80, 0.80, 0.80), // Light gray
-    //             new THREE.Vector3(0.70, 0.70, 0.70), // Medium gray
-    //             new THREE.Vector3(0.60, 0.60, 0.60), // Dark gray
-    //             new THREE.Vector3(0.80, 0.80, 0.70)  // Warm gray
-    //         ];
-    //     }
-    //
-    //     // Temperature modifications to existing color sets
-    //     // This adds an additional layer of variation
-    //     if (temperature < 0) {
-    //         // Extreme cold - add more deep blue
-    //         for (let i = 0; i < colorSet.length; i++) {
-    //             colorSet[i].x *= 0.7;      // Reduce red
-    //             colorSet[i].y *= 0.8;      // Reduce green somewhat
-    //             colorSet[i].z = Math.min(1.0, colorSet[i].z * 1.2); // Increase blue
-    //         }
-    //     } else if (temperature > 30) {
-    //         // Extreme heat - add more red
-    //         for (let i = 0; i < colorSet.length; i++) {
-    //             colorSet[i].x = Math.min(1.0, colorSet[i].x * 1.2); // Increase red
-    //             colorSet[i].y *= 0.9;      // Reduce green somewhat
-    //             colorSet[i].z *= 0.7;      // Reduce blue
-    //         }
-    //     }
-    //
-    //     // Make sure colors are truly distinct by enhancing variation
-    //     const avgColor = new THREE.Vector3(0, 0, 0);
-    //     for (let i = 0; i < colorSet.length; i++) {
-    //         avgColor.add(colorSet[i]);
-    //     }
-    //     avgColor.divideScalar(colorSet.length);
-    //
-    //     // Push colors further from average for more contrast
-    //     for (let i = 0; i < colorSet.length; i++) {
-    //         const direction = new THREE.Vector3().subVectors(colorSet[i], avgColor).normalize();
-    //         // Push colors 30% further from average
-    //         colorSet[i].addScaledVector(direction, 0.3);
-    //
-    //         // Clamp to valid range
-    //         colorSet[i].x = Math.max(0, Math.min(1, colorSet[i].x));
-    //         colorSet[i].y = Math.max(0, Math.min(1, colorSet[i].y));
-    //         colorSet[i].z = Math.max(0, Math.min(1, colorSet[i].z));
-    //     }
-    //
-    //     // Set up color transition with dramatically different colors
-    //     this.startColorTransition(colorSet);
-    // }
 
     startColorTransition(targetColors) {
         if (this.debug) {
@@ -492,6 +379,22 @@ class WeatherApp {
         // Start the transition
         this.currentColorTransition.active = true;
         this.currentColorTransition.startTime = Date.now();
+    }
+
+    // if debug mode is enabled, loop trough different weather types
+    debugWeatherTypes() {
+        if (!this.debug) return;
+
+        const weatherTypes = [
+            "Clear", "Sunny", "Rain", "Drizzle", "Clouds", "Fog", "Wind", "Storm"
+        ];
+
+        let index = 0;
+        setInterval(() => {
+            const weatherType = weatherTypes[index % weatherTypes.length];
+            this.updateShaderColors(this.weather.temp_c, weatherType);
+            index++;
+        }, 5000); // Change every 5 seconds
     }
 }
 
@@ -517,6 +420,6 @@ fetch('https://api.ipify.org?format=json')
                 }
             )
             .then(data => {
-                const app = new WeatherApp(data.weather.current, data.weather.location, true);
+                const app = new WeatherApp(data.weather.current, data.weather.location, false);
             })
     });
