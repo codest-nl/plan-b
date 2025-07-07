@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 class WeatherApp {
     constructor(weather, location, debug = false) {
         this.debug = debug;
